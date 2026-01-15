@@ -1,72 +1,362 @@
-#login-body{
-    background-color: #2C3333;
-    font-family: Arial, sans-serif;
-    display:flex;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+#login-body {
+  background-color: #2c3333;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+#login-container {
+  background-color: #2e4f4f;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px 2px rgba(158, 158, 158, 0.3);
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 5%;
+  padding-top: 5%;
+}
+#login-container h1 {
+  margin-bottom: 70px;
+  color: #cbe4de;
+  font-size: 50px;
+}
+.login-input {
+  width: 150%;
+  padding: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #cbe4de;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #d6d6d6;
+  position: relative;
+  left: -20%;
+  color: #2c3333;
+}
+#login-container label {
+  font-weight: bold;
+  color: #cbe4de;
+  position: relative;
+  left: -16%;
+}
+#login-container input[type="submit"] {
+  background-color: #0e8388;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 75%;
+  position: relative;
+  margin-top: 15px;
+  left: 14%;
+}
+#login-container h5 {
+  margin-top: 50px;
+  color: #cbe4de;
+  font-size: 15px;
+}
+#login-container a {
+  margin-top: 50px;
+  color: #cbe4de;
+  font-size: 15px;
+}
+#index-body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  padding: 0;
+  box-sizing: border-box;
+  /* overflow-x: hidden; */
+}
+#index-header {
+  background-color: #2c3333;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px 5%;
+  font-size: 23px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav a {
+  text-decoration: none;
+  color: #cbe4de;
+  font-weight: 500;
+  margin: 0 15px;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #0e8388;
+}
+
+.nav-logo a {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  margin-left: 0;
+}
+
+.nav-links-center,
+.nav-links-right {
+  display: flex;
+  align-items: center;
+}
+
+.register-btn {
+  background-color: #2e4f4f;
+  color: white !important;
+  padding: 8px 20px;
+  border-radius: 20px;
+}
+
+.register-btn:hover {
+  background-color: #0e8388;
+}
+#index-main {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  width: 100%;
+}
+#index-home {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-image: url(./assets/bg-home.jpg);
+  background-size: cover;
+  background-position: center;
+}
+#index-home h1 {
+  color: #cbe4de;
+  font-size: 45px;
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  left: 3%;
+}
+#index-home div {
+  position: relative;
+  top: 35%;
+  left: 10%;
+  width: 80%;
+  padding: 30px;
+  background-color: rgba(44, 51, 51, 0.2);
+  border-radius: 20px;
+  text-align: left;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+#index-sport {
+  height: 70vh;
+  width: 100%;
+  display: flex;
+  position: relative;
+  top: 0;
+  background-color: #2c3333;
+  z-index: 2;
+  overflow: hidden;
+  scroll-margin-top: 70px;
+}
+.sport-item {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 40px 20px;
+  text-decoration: none;
+  color: white;
+  background-size: cover;
+  background-position: center;
+  transition: flex 0.6s ease, filter 0.3s;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 1s ease-out;
+}
+.sport-item:hover {
+  background-color: rgba(14, 131, 136, 0.3);
+  color: white;
+  transform: scale(1.02);
+}
+.sport-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 40%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  z-index: 1;
+  transition: background 0.3s;
+}
+.sport-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.sport-content h3 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #0e8388;
+}
+
+.sport-content p {
+  font-size: 16px;
+  opacity: 0.8;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.explore-link {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #0e8388;
+  padding-bottom: 5px;
+}
+.sport-item:hover {
+  flex: 1.5;
+  filter: brightness(1.1);
+}
+
+.sport-item:hover .sport-overlay {
+  background: linear-gradient(
+    to bottom,
+    transparent 20%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+.sport-item.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sport-item:nth-child(2) {
+  transition-delay: 0.2s;
+}
+.sport-item:nth-child(3) {
+  transition-delay: 0.4s;
+}
+.sport-item:nth-child(4) {
+  transition-delay: 0.6s;
+}
+
+#index-general {
+  padding: 80px 10%;
+  background-color: #f4f4f4;
+  text-align: center;
+}
+
+.general-title {
+  font-size: 32px;
+  color: #2c3333;
+  margin-bottom: 40px;
+}
+
+.general-container {
+  display: grid;
+  /* Automatski pravi kolone koje se prilagođavaju ekranu */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.general-card {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Priprema za skrol animaciju */
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+/* Kada JS doda klasu .show */
+.general-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.general-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+.general-card h3 {
+  color: #2e4f4f;
+  margin-bottom: 15px;
+}
+
+.general-card p {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.card-link {
+  text-decoration: none;
+  color: #0e8388;
+  font-weight: bold;
+  font-size: 14px;
+  border: 2px solid #0e8388;
+  padding: 8px 20px;
+  border-radius: 25px;
+  transition: all 0.3s;
+}
+
+.card-link:hover {
+  background-color: #0e8388;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  #index-sport {
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width:100vw;
-    overflow: hidden;
-}
-#login-container{
-    background-color: #2E4F4F;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px 2px rgba(158, 158, 158, 0.3);
-    width: 25%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 5%;
-    padding-top: 5%;
-}
-#login-container h1{
-    margin-bottom: 70px;
-    color: #CBE4DE;
-    font-size: 50px;
-    
-}
-.login-input{
-    width: 150%;
-    padding: 10px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    border: 1px solid #CBE4DE;
-    border-radius: 4px;
-    box-sizing: border-box;
-    background-color: #d6d6d6;
-    position:relative;
-    left: -20%;
-    color:#2C3333;
-    
-}
-#login-container label{
-    font-weight: bold;
-    color: #CBE4DE;
-    position:relative;
-    left: -16%;
-}
-#login-container input[type="submit"]{
-    background-color: #0E8388;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    width: 75%;
-    position:relative;
-    margin-top:15px;
-    left: 14%;
-}
-#login-container h5{
-    margin-top: 50px;
-    color: #CBE4DE;
-    font-size:15px;
-}
-#login-container a{
-    margin-top: 50px;
-    color: #CBE4DE;
-    font-size:15px;
+    height: auto;
+  }
+  .sport-item {
+    height: 250px;
+  }
 }
