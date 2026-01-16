@@ -75,3 +75,57 @@ window.onload = function() {
     }
   }
 };
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const modal = document.getElementById("myModal");
+    const loginSection = document.getElementById("loginSection");
+    const planSection = document.getElementById("planSection");
+    const loginForm = document.getElementById("loginForm");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    
+    const checkAuthAndDisplay = async () => {
+        const isLoggedIn = await simulateAuthCheck();
+
+        modal.style.display = "block"; 
+
+        if (isLoggedIn) {
+            loginSection.style.display = "none";
+            planSection.style.display = "block";
+        } else {
+            loginSection.style.display = "block";
+            planSection.style.display = "none";
+        }
+    };
+
+    
+    async function simulateAuthCheck() {
+        return new Promise((resolve) => {
+            const user = localStorage.getItem("isLoggedIn");
+            setTimeout(() => resolve(user === "true"), 500); 
+        });
+    }
+
+    
+    loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        localStorage.setItem("isLoggedIn", "true");
+        checkAuthAndDisplay(); // Refresh the view
+    });
+
+    
+    logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("isLoggedIn");
+        checkAuthAndDisplay();
+    });
+
+    
+    document.querySelector(".close").onclick = () => modal.style.display = "none";
+    
+    
+    checkAuthAndDisplay();
+});

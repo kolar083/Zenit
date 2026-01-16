@@ -12,12 +12,26 @@
 <div id="myModal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
-    <h2>Dobrodošli!</h2>
-    <p>Prijavite se na naš newsletter:</p>
-    <form>
-      <input type="email" placeholder="Vaš email" required>
-      <button type="submit">Prijavi se</button>
-    </form>
+    
+    <div id="loginSection" style="display: none;">
+      <h2>Login Required</h2>
+      <p>Please log in to access the plan maker.</p>
+      <form id="loginForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <button type="submit">Log In</button>
+      </form>
+    </div>
+
+    <div id="planSection" style="display: none;">
+      <h2>Welcome to the Plan Maker</h2>
+      <p>Here we will create your personalized plan.</p>
+      <form id="planForm">
+        <input type="text" placeholder="Plan Name" required>
+        <button type="submit">Create Plan</button>
+      </form>
+      <button id="logoutBtn" style="margin-top: 10px;">Logout</button>
+    </div>
+    
   </div>
 </div>
 
