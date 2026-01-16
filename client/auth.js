@@ -24,7 +24,7 @@ form.addEventListener('submit', async (e)=>{
                 Password
             })
         });
-        const data = await response.text();
+        const data = await response.json();
 
         if(response.ok){
             alert('Registration done!');

@@ -21,8 +21,9 @@ if (form){
             const data = await response.json();
 
             if(response.ok){
-                window.location.href='Plan.html';
                 localStorage.setItem('token',data.token);
+                console.log(data);
+                window.location.href="index.html"
             }
             else{
                 alert(data.message);
