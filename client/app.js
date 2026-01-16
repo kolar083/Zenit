@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-window.onload = function() {
+/*window.onload = function() {
   const modal = document.getElementById("myModal");
   const span = document.getElementsByClassName("close")[0];
 
@@ -74,6 +74,86 @@ window.onload = function() {
       modal.style.display = "none";
     }
   }
+};*/
+window.onload = function() {
+    const modal = document.getElementById("myModal");
+    const span = document.getElementsByClassName("close")[0];
+    const loginSection = document.getElementById("loginSection");
+    const planSection = document.getElementById("planSection");
+    const loginForm = document.getElementById('loginForm');
+    const planForm = document.getElementById('planForm');
+
+    // Funkcija za proveru autentifikacije
+    function checkAuth() {
+        const token = localStorage.getItem('token');
+        
+        // Provera da li token postoji i da nije greškom upisan kao string "null" ili "undefined"
+        if (token && token !== "null" && token !== "undefined") {
+            console.log("Korisnik je ulogovan.");
+            loginSection.style.setProperty("display", "none", "important");
+            planSection.style.setProperty("display", "block", "important");
+        } else {
+            console.log("Korisnik nije ulogovan.");
+            loginSection.style.setProperty("display", "block", "important");
+            planSection.style.setProperty("display", "none", "important");
+        }
+    }
+
+    // 1. Odmah proveri status čim se skripta učita
+    checkAuth();
+    
+    // 2. Prikaži modal
+    modal.style.display = "block";
+
+    // 3. Login logika
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const Username = document.getElementById('username').value;
+            const Password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/user/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ Username, Password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.token) {
+                    localStorage.setItem('token', data.token);
+                    alert('Login successful');
+                    
+                    // Osveži prikaz sekcija bez reload-a
+                    checkAuth(); 
+                } else {
+                    alert(data.message || 'Invalid login');
+                }
+            } catch (error) {
+                console.error("Greška pri prijavi:", error);
+                alert('Server error');
+            }
+        });
+    }
+
+    // 4. Logika za Plan Formu (opciono, dodaj slanje podataka na server ovde)
+    if (planForm) {
+        planForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert("Plan se generiše...");
+            // Ovde ide tvoja logika za Create Plan
+        });
+    }
+
+    // 5. Zatvaranje modala
+    span.onclick = () => modal.style.display = "none";
+    window.onclick = (event) => {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
 };
 
 document.addEventListener("DOMContentLoaded", async () => {

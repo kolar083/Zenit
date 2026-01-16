@@ -32,13 +32,17 @@ router.post('/register',async(req,res)=>{
         const query = 'insert into users(Username, Password, Email) values(?,?,?)';
         db.query(query,[Username,HashPassword,Email], (err,results)=>{
             if(err) throw err;
-            res.status(201).send('User has been registered in the database');
+            res.status(201).json({
+                message: 'User has been added to the database'
+            });
         });
     }
     catch(error)
     {
         console.error(error);
-        res.status(500).send('Error while registering user',error);
+        res.status(500).json({
+            message: 'Error while registering user'
+        });
         
     }
 });
@@ -54,8 +58,7 @@ router.post('/login',async(req,res)=>{
             if(IsRight){
                 res.status(200).json({
                     message: 'User has logged in',
-                    username: user.Username,
-                    token: Math.random()*100
+                    token: user.Username
                 });
 
             }
