@@ -59,6 +59,88 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+/*window.onload = function() {
+  const modal = document.getElementById("myModal");
+  const span = document.getElementsByClassName("close")[0];
+=======
+>>>>>>> eefdfc9a54fd86ae0e86d17899bf66f5f2560a48
+
+
+<<<<<<< HEAD
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target == span) {
+      modal.style.display = "none";
+    }
+  }
+};*/
+window.onload = function() {
+    const modal = document.getElementById("myModal");
+    const span = document.getElementsByClassName("close")[0];
+    const loginSection = document.getElementById("loginSection");
+    const planSection = document.getElementById("planSection");
+    const loginForm = document.getElementById('loginForm');
+    const planForm = document.getElementById('planForm');
+
+    // Funkcija za proveru autentifikacije
+    function checkAuth() {
+        const token = localStorage.getItem('token');
+        
+        // Provera da li token postoji i da nije greškom upisan kao string "null" ili "undefined"
+        if (token && token !== "null" && token !== "undefined") {
+            console.log("Korisnik je ulogovan.");
+            loginSection.style.setProperty("display", "none", "important");
+            planSection.style.setProperty("display", "block", "important");
+        } else {
+            console.log("Korisnik nije ulogovan.");
+            loginSection.style.setProperty("display", "block", "important");
+            planSection.style.setProperty("display", "none", "important");
+        }
+    }
+
+    // 1. Odmah proveri status čim se skripta učita
+    checkAuth();
+    
+    // 2. Prikaži modal
+    modal.style.display = "block";
+
+    // 3. Login logika
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const Username = document.getElementById('username').value;
+            const Password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/user/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ Username, Password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.token) {
+                    localStorage.setItem('token', data.token);
+                    alert('Login successful');
+                    
+                    // Osveži prikaz sekcija bez reload-a
+                    checkAuth(); 
+                } else {
+                    alert(data.message || 'Invalid login');
+                }
+            } catch (error) {
+                console.error("Greška pri prijavi:", error);
+                alert('Server error');
+            }
+        });
+=======
 
 document.addEventListener("DOMContentLoaded", async () => {
   const modal = document.getElementById("myModal");
@@ -77,9 +159,174 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
       loginSection.style.display = "block";
       planSection.style.display = "none";
+>>>>>>> 80ce8f18e986e59aa2ad6f2c6f9cc44cc30bcfd3
     }
-  };
 
+<<<<<<< HEAD
+    // 4. Logika za Plan Formu (opciono, dodaj slanje podataka na server ovde)
+    if (planForm) {
+        planForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert("Plan se generiše...");
+            // Ovde ide tvoja logika za Create Plan
+        });
+    }
+
+    // 5. Zatvaranje modala
+    span.onclick = () => modal.style.display = "none";
+    window.onclick = (event) => {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+};
+=======
+>>>>>>> eefdfc9a54fd86ae0e86d17899bf66f5f2560a48
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const modal = document.getElementById("myModal");
+    const loginSection = document.getElementById("loginSection");
+    const planSection = document.getElementById("planSection");
+    const loginForm = document.getElementById("loginForm");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    
+    const checkAuthAndDisplay = async () => {
+        const isLoggedIn = await simulateAuthCheck();
+
+        modal.style.display = "block"; 
+
+        if (isLoggedIn) {
+            loginSection.style.display = "none";
+            planSection.style.display = "block";
+        } else {
+            loginSection.style.display = "block";
+            planSection.style.display = "none";
+        }
+    };
+
+    
+    async function simulateAuthCheck() {
+        return new Promise((resolve) => {
+            const user = localStorage.getItem("isLoggedIn");
+            setTimeout(() => resolve(user === "true"), 500); 
+        });
+    }
+
+    
+    loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        localStorage.setItem("isLoggedIn", "true");
+        checkAuthAndDisplay(); // Refresh the view
+    });
+
+    
+    
+
+    
+    document.querySelector(".close").onclick = () => modal.style.display = "none";
+    
+    
+    checkAuthAndDisplay();
+});
+
+document.getElementById("planForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const fiveK = parseFloat(document.getElementById("5k").value);
+    const tenK = parseFloat(document.getElementById("10k").value);
+    const weight = parseFloat(document.getElementById("weight").value);
+    const height = parseFloat(document.getElementById("height").value);
+    const W = parseInt(document.querySelector('input[name="weeks"]:checked')?.value);
+
+    let B,P,I;
+
+  B= weight/(height*height);
+  P=((fiveK/5)+(tenK/10))/2;
+  I=P*Math.sqrt(B/22)
+
+  if(I<=5.5) {
+    if(W=12)
+      fetch();
+    else if (W=16)
+      fetch();
+    else if (W=20)
+      fetch();
+  }
+  else if (I > 5.5){
+     if(W=12)
+      fetch();
+    else if (W=16)
+      fetch();
+    else if (W=20)
+      fetch();
+  }
+});
+
+
+
+const registrationForm = document.getElementById('register-form');
+
+registrationForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    
+    document.querySelectorAll('.error-msg').forEach(el => el.textContent = '');
+    document.querySelectorAll('.login-input').forEach(el => el.classList.remove('invalid'));
+
+    const email = document.getElementById('Email');
+    const username = document.getElementById('username');
+    const pass = document.getElementById('password');
+    const repeatPass = document.getElementById('repeat-password');
+
+    let isValid = true;
+
+    
+    const showError = (inputEl, errorId, message) => {
+        document.getElementById(errorId).textContent = message;
+        inputEl.classList.add('invalid');
+        isValid = false;
+    };
+
+    
+    [email, username, pass, repeatPass].forEach(input => {
+        if (input.value.length > 32) {
+            showError(input, `${input.id}-error`, "Maximum 32 characters allowed.");
+        }
+    });
+
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.com$/;
+    if (!emailRegex.test(email.value)) {
+        showError(email, 'email-error', "Invalid email (must end in .com)");
+    }
+
+    
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (pass.value !== repeatPass.value) {
+        showError(repeatPass, 'repeat-error', "Passwords do not match.");
+    } else if (!passwordRegex.test(pass.value)) {
+        showError(pass, 'pass-error', "Need 8+ chars, 1 uppercase, 1 lowercase, 1 number.");
+    }
+
+    if (!isValid) return;
+
+    
+    try {
+        const result = await mockBackendCheck(email.value, username.value);
+        if (!result.success) {
+            if (result.type === 'email') showError(email, 'email-error', result.message);
+            if (result.type === 'user') showError(username, 'user-error', result.message);
+        } else {
+            alert("Registration Successful!");
+            registrationForm.submit();
+        }
+    } catch (err) {
+        showError(email, 'email-error', "Server error. Try again later.");
+=======
   
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -163,8 +410,23 @@ document.getElementById("planForm").addEventListener("submit", function (e) {
       if (W == 12) fetch();
       else if (W == 16) fetch();
       else if (W == 20) fetch();
+>>>>>>> 80ce8f18e986e59aa2ad6f2c6f9cc44cc30bcfd3
     }
-  }
 });
 
+async function mockBackendCheck(email, username) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            const dbEmails = ['test@test.com'];
+            const dbUsers = ['admin'];
 
+            if (dbEmails.includes(email)) {
+                resolve({ success: false, type: 'email', message: "Email already registered." });
+            } else if (dbUsers.includes(username)) {
+                resolve({ success: false, type: 'user', message: "Username already taken." });
+            } else {
+                resolve({ success: true });
+            }
+        }, 600);
+    });
+}

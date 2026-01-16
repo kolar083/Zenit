@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa sportskih objekata</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        
+        #map {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30%;
+            height: 100vh;
+            z-index: 1000;
+            
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        
+        const map = L.map('map').setView([45.8, 16.0], 13); 
+
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        
+        function fetchSportsData(lat, lon) {
+            
+            const query = `
+                [out:json];
+                (
+                  node["sport"](around:30000,${lat},${lon});
+                  way["sport"](around:30000,${lat},${lon});
+                  relation["sport"](around:30000,${lat},${lon});
+                );
+                out center;
+            `;
+            const url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    data.elements.forEach(el => {
+                        let coords;
+                        if(el.type === "node") {
+                            coords = [el.lat, el.lon];
+                        } else if(el.type === "way" || el.type === "relation") {
+                            coords = [el.center.lat, el.center.lon];
+                        }
+                        if(coords) {
+                            L.marker(coords).addTo(map)
+                             .bindPopup(el.tags.name || "Sportski objekt")
+                             .openPopup();
+                        }
+                    });
+                })
+                .catch(err => console.error("Greška pri dohvaćanju sportskih objekata:", err));
+        }
+
+        
+        function locateUser() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+
+                    
+                    const userMarker = L.marker([lat, lon]).addTo(map)
+                        .bindPopup("<b>Tvoja lokacija</b>")
+                        .openPopup();
+
+                    
+                    map.setView([lat, lon], 12);
+
+                    
+                    L.circle([lat, lon], {
+                        color: 'blue',
+                        fillColor: '#blue',
+                        fillOpacity: 0.1,
+                        radius: 30000
+                    }).addTo(map);
+
+                    
+                    fetchSportsData(lat, lon);
+                }, () => {
+                    alert("Ne možemo dohvatiti tvoju lokaciju.");
+                });
+            } else {
+                alert("Geolokacija nije podržana u ovom pregledniku.");
+            }
+        }
+
+        locateUser();
+    </script>
+</body>
+</html>
