@@ -33,7 +33,8 @@ router.post('/register',async(req,res)=>{
         db.query(query,[Username,HashPassword,Email], (err,results)=>{
             if(err) throw err;
             res.status(201).json({
-                message: 'User has been added to the database'
+                message: 'User has been added to the database',
+                ID_User : results.insertId
             });
         });
     }
@@ -58,11 +59,11 @@ router.post('/login',async(req,res)=>{
             if(IsRight){
                 res.status(200).json({
                     message: 'User has logged in',
-                    token: user.Username
+                    token: user.ID_User
                 });
 
             }
-            else{
+            else{   
                 res.status(401).json({
                     message: 'Invalid credentials'
                 });
@@ -77,16 +78,21 @@ router.post('/login',async(req,res)=>{
 });
 
 router.post('/DecisionModal', async (req,res)=>{
-    const {FiveK,TenK,Weight,Height,Nb_Weeks} = req.body;
-    if(!FiveK||!TenK||!Weight||!Height||Nb_Weeks){
+    const {ID_User, FiveK,TenK,Weight,Height,Nb_Weeks} = req.body;
+    if(ID_User==null ||
+        FiveK==null||
+        TenK==null ||
+        Weight==null ||
+        Height==null ||
+        Nb_Weeks==null){
         return res.status(400).json({message: 'All fields are required'});
     }
     try{
-        const query = 'insert into statistics(FiveK, TenK, Weight, Height, Nb_Weeks) values(?,?,?,?,?)';
-        db.query(query,[FiveK,TenK,Weight,Height,Nb_Weeks], (err,results)=>{
+        const query = 'insert into statistics(ID_User, FiveK, TenK, Weight, Height, Nb_Weeks) values(?,?,?,?,?,?)';
+        db.query(query,[ID_User, FiveK,TenK,Weight,Height,Nb_Weeks], (err,results)=>{
             if(err) throw err;
             res.status(201).json({
-                message: 'User has been added to the database'
+                message: 'Statistics about the user have been added to the database'
             });
         });
     }

@@ -21,8 +21,8 @@ if (form){
             const data = await response.json();
 
             if(response.ok){
-                localStorage.setItem('token',data.token);
-                console.log(data);
+                localStorage.setItem('ID_User', data.ID_User);
+                localStorage.setItem('isLoggedIn', 'true');
                 window.location.href="index.html"
             }
             else{
