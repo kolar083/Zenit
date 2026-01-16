@@ -214,6 +214,20 @@
         color: #f0f4f8;
       }
     </style>
+
+    <script>
+      window.onload = function () {
+        const savedPdfSrc = localStorage.getItem("plan_pdf_src");
+        const pdfElement = document.getElementById("pdf");
+
+        if (pdfElement && savedPdfSrc) {
+          pdfElement.src = savedPdfSrc + "#toolbar=0&navpanes=0";
+          console.log("PDF source updated successfully.");
+        } else {
+            pdfElement.src="./assets/pdfs/10K/10K_12_easy.pdf#toolbar=0&navpanes=0";
+        }
+      };
+    </script>
   </head>
   <body>
     <div
