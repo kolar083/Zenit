@@ -136,7 +136,7 @@ document.getElementById("planForm").addEventListener("submit", function(e) {
     const tenK = parseFloat(document.getElementById("10k").value);
     const weight = parseFloat(document.getElementById("weight").value);
     const height = parseFloat(document.getElementById("height").value);
-
+    const W = parseInt(document.querySelector('input[name="weeks"]:checked')?.value);
 
     let B,P,I;
 
@@ -145,10 +145,20 @@ document.getElementById("planForm").addEventListener("submit", function(e) {
   I=P*Math.sqrt(B/22)
 
   if(I<=5.5) {
-    fetch();
+    if(W=12)
+      fetch();
+    else if (W=16)
+      fetch();
+    else if (W=20)
+      fetch();
   }
   else if (I > 5.5){
-    fetch();
+     if(W=12)
+      fetch();
+    else if (W=16)
+      fetch();
+    else if (W=20)
+      fetch();
   }
 });
 
