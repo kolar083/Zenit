@@ -75,4 +75,28 @@ router.post('/login',async(req,res)=>{
         }
     });
 });
+
+router.post('/DecisionModal', async (req,res)=>{
+    const {FiveK,TenK,Weight,Height,Nb_Weeks} = req.body;
+    if(!FiveK||!TenK||!Weight||!Height||Nb_Weeks){
+        return res.status(400).json({message: 'All fields are required'});
+    }
+    try{
+        const query = 'insert into statistics(FiveK, TenK, Weight, Height, Nb_Weeks) values(?,?,?,?,?)';
+        db.query(query,[FiveK,TenK,Weight,Height,Nb_Weeks], (err,results)=>{
+            if(err) throw err;
+            res.status(201).json({
+                message: 'User has been added to the database'
+            });
+        });
+    }
+    catch(error)
+    {
+        console.error(error);
+        res.status(500).json({
+            message: 'Error while registering user'
+        });
+        
+    }
+})
 module.exports = router;
