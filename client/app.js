@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const modal = document.getElementById("myModal");
   const loginSection = document.getElementById("loginSection");
   const planSection = document.getElementById("planSection");
-  const loginForm = document.getElementById("loginForm");
+  const loginForm = document.getElementById("login-form");
 
   
   const checkAuthAndDisplay = () => {
@@ -86,8 +86,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     e.preventDefault();
 
     
-    const usernameValue = document.getElementById("username").value;
-    const passwordValue = document.getElementById("password").value;
+    const usernameValue = document.getElementById("Username").value;
+    const passwordValue = document.getElementById("Password").value;
 
     try {
       
