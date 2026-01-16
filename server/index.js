@@ -1,108 +1,89 @@
-
 const express = require('express');
 const bcrypt = require('bcrypt');
 const db = require('./DbConnect');
 const cors = require('cors');
 const router = express.Router();
-
-
+const mysql = require("mysql2/promise");
 
 const app = express();
-app.get('/', (req, res) => {
-  res.send('Server radi na localhost:3000');
-});
 const PORT = process.env.PORT || 3000;
-app.listen(PORT,()=>{
-    console.log('Server je na portu 3000');
-})
+
+const pool = mysql.createPool({
+  host: "localhost",
+  user: "root",
+  password: "password",
+  database: "zenithdb",
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
 
 app.use(express.json());
 app.use(cors());
 app.use('/user',router);
 
-router.post('/register',async(req,res)=>{
-    const {Username,Email,Password} = req.body;
-    if(!Username||!Email||!Password){
-        return res.status(400).json({message: 'All fields are required'});
-    }
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
 
-    try{
-        const salt = await bcrypt.genSalt(10);
-        const HashPassword = await bcrypt.hash(Password,salt);
-        const query = 'insert into users(Username, Password, Email) values(?,?,?)';
-        db.query(query,[Username,HashPassword,Email], (err,results)=>{
-            if(err) throw err;
-            res.status(201).json({
-                message: 'User has been added to the database',
-                ID_User : results.insertId
-            });
-        });
-    }
-    catch(error)
-    {
-        console.error(error);
-        res.status(500).json({
-            message: 'Error while registering user'
-        });
-        
-    }
-});
+router.post('/register', async (req, res) => {
+  const { Username, Email, Password } = req.body;
 
-router.post('/login',async(req,res)=>{
-    const {Username,Password} = req.body;
-    const query = 'select * from users where Username = ?';
-    db.query(query,[Username],async(err,results)=>{
-        if(err) throw err;
-        if(results.length>0){
-            const user = results[0];
-            const IsRight = await bcrypt.compare(Password, user.Password);
-            if(IsRight){
-                res.status(200).json({
-                    message: 'User has logged in',
-                    token: user.ID_User
-                });
+  if (!Username || !Email || !Password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+  if (!isValidEmail(Email)) {
+    return res.status(400).json({ message: "Email is not valid" });
+  }
 
-            }
-            else{   
-                res.status(401).json({
-                    message: 'Invalid credentials'
-                });
-            }
+  try {
+    const checkQuery = `
+      SELECT Username, Email
+      FROM users
+      WHERE LOWER(Username) = LOWER(?) OR LOWER(Email) = LOWER(?)
+      LIMIT 1
+    `;
+
+    db.query(checkQuery, [Username, Email], async (err, results) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Database error" });
+      }
+
+      if (results.length > 0) {
+        const row = results[0];
+
+        if (row.Username.toLowerCase() === Username.toLowerCase()) {
+          return res.status(409).json({ message: "Username already exists." });
         }
-        else{
-            res.status(404).json({
-                    message: 'User not found'
-                });
+        if (row.Email.toLowerCase() === Email.toLowerCase()) {
+          return res.status(409).json({ message: "Email already exists." });
         }
+        return res.status(409).json({ message: "User already exists." });
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      const HashPassword = await bcrypt.hash(Password, salt);
+
+      const insertQuery =
+        "INSERT INTO users (Username, Password, Email) VALUES (?, ?, ?)";
+
+      db.query(insertQuery, [Username, HashPassword, Email], (err2) => {
+        if (err2) {
+          console.error(err2);
+          return res.status(500).json({ message: "Error while registering user" });
+        }
+        return res.status(201).json({ message: "User has been added to the database" });
+      });
     });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error while registering user" });
+  }
 });
 
-router.post('/DecisionModal', async (req,res)=>{
-    const {ID_User, FiveK,TenK,Weight,Height,Nb_Weeks} = req.body;
-    if(ID_User==null ||
-        FiveK==null||
-        TenK==null ||
-        Weight==null ||
-        Height==null ||
-        Nb_Weeks==null){
-        return res.status(400).json({message: 'All fields are required'});
-    }
-    try{
-        const query = 'insert into statistics(ID_User, FiveK, TenK, Weight, Height, Nb_Weeks) values(?,?,?,?,?,?)';
-        db.query(query,[ID_User, FiveK,TenK,Weight,Height,Nb_Weeks], (err,results)=>{
-            if(err) throw err;
-            res.status(201).json({
-                message: 'Statistics about the user have been added to the database'
-            });
-        });
-    }
-    catch(error)
-    {
-        console.error(error);
-        res.status(500).json({
-            message: 'Error while registering user'
-        });
-        
-    }
+app.listen(PORT,()=>{
+    console.log('Server je na portu ' + PORT);
 })
+
 module.exports = router;
