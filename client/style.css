@@ -684,3 +684,75 @@ nav a:hover {
   user-select: none;
   color: #CBE4DE;
 }
+@media (max-width: 1024px) {
+  .modal-content {
+    width: 50%;
+    margin-top: 20%;
+  }
+
+  #loginSection input[type="submit"],
+  #planForm input[type="submit"] {
+    width: 90%;
+    left: 5%;
+  }
+
+  .radio-group {
+    left: 0;
+    padding-left: 5%;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: 85%;
+    margin-top: 25%;
+    padding: 18px;
+  }
+
+  #loginSection input[type="submit"],
+  #planForm input[type="submit"] {
+    width: 100%;
+    left: 0;
+  }
+
+  .radio-group {
+    left: 0;
+    font-size: 14px;
+    padding-left: 0;
+  }
+
+  .container {
+    display: block;
+    margin-bottom: 10px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .modal-content {
+    width: 92%;
+    margin-top: 30%;
+    padding: 15px;
+  }
+
+  .close {
+    font-size: 24px;
+  }
+
+  .radio-group {
+    font-size: 13px;
+  }
+
+  .checkmark {
+    height: 16px;
+    width: 16px;
+  }
+
+  .container .checkmark:after {
+    top: 4px;
+    left: 4px;
+    width: 6px;
+    height: 6px;
+  }
+}

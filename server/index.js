@@ -5,27 +5,29 @@ const db = require('./DbConnect');
 const cors = require('cors');
 const router = express.Router();
 
-
-
 const app = express();
-app.get('/', (req, res) => {
-  res.send('Server radi na localhost:3000');
-});
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT,()=>{
-    console.log('Server je na portu 3000');
+    console.log('Server je na portu ' + PORT);
 })
 
 app.use(express.json());
 app.use(cors());
 app.use('/user',router);
 
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 router.post('/register',async(req,res)=>{
     const {Username,Email,Password} = req.body;
     if(!Username||!Email||!Password){
         return res.status(400).json({message: 'All fields are required'});
     }
-
+    if(!isValidEmail(Email)){
+        return res.status(400).json({message: "Email is not valid"});
+    }
     try{
         const salt = await bcrypt.genSalt(10);
         const HashPassword = await bcrypt.hash(Password,salt);
@@ -36,6 +38,25 @@ router.post('/register',async(req,res)=>{
                 message: 'User has been added to the database'
             });
         });
+
+        const [existing] = await pool.query(
+            `SELECT Username, Email
+            FROM users
+            WHERE LOWER(Username) = LOWER(?) OR LOWER(Email) = LOWER(?)
+            LIMIT 1`,
+            [Username, Email]
+        );
+
+        if (existing.length > 0) {
+            const row = existing[0];
+            if (row.username.toLowerCase() === Username.toLowerCase()) {
+                return res.status(409).json("Username already exists.");
+            }
+            if (row.email.toLowerCase() === Email.toLowerCase()) {
+                return res.status(409).json("Email already exists.");
+            }
+            return res.status(409).json("User already exists.");
+        }
     }
     catch(error)
     {
@@ -76,27 +97,4 @@ router.post('/login',async(req,res)=>{
     });
 });
 
-router.post('/DecisionModal', async (req,res)=>{
-    const {FiveK,TenK,Weight,Height,Nb_Weeks} = req.body;
-    if(!FiveK||!TenK||!Weight||!Height||Nb_Weeks){
-        return res.status(400).json({message: 'All fields are required'});
-    }
-    try{
-        const query = 'insert into statistics(FiveK, TenK, Weight, Height, Nb_Weeks) values(?,?,?,?,?)';
-        db.query(query,[FiveK,TenK,Weight,Height,Nb_Weeks], (err,results)=>{
-            if(err) throw err;
-            res.status(201).json({
-                message: 'User has been added to the database'
-            });
-        });
-    }
-    catch(error)
-    {
-        console.error(error);
-        res.status(500).json({
-            message: 'Error while registering user'
-        });
-        
-    }
-})
 module.exports = router;
