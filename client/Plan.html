@@ -85,9 +85,29 @@
         display: flex;
         align-items: center;
       }
+
+    #kalendar {
+    position: fixed;
+    top: 110px;            /* ispod headera */
+    right: 85%;            /* POMERA KALENDAR UDESNO !!! */
+    width: 35%;
+    height: 45vh;
+    border-radius: 12px;
+    padding: 15px;
+    z-index: 1;
+}
+
+#kalendar iframe {
+    width: 114%;
+    height: 100%;
+    border: none;
+}
     </style>
   </head>
   <body>
+    <div id="kalendar" style="left: 0; width: 60%; position:relative; margin-bottom: 60%">
+        <iframe src="https://calendar.google.com/calendar/embed?src=iframely.embeds%40gmail.com" allowfullscreen></iframe>
+    </div>
     <header id="index-header">
       <nav>
         <div class="nav-logo">
@@ -114,6 +134,7 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+    
       const map = L.map("map").setView([45.8, 16.0], 13);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
