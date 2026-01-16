@@ -70,7 +70,7 @@ window.onload = function() {
   }
 
   window.onclick = function(event) {
-    if (event.target == modal) {
+    if (event.target == span) {
       modal.style.display = "none";
     }
   }
@@ -118,10 +118,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     
-    logoutBtn.addEventListener("click", () => {
-        localStorage.removeItem("isLoggedIn");
-        checkAuthAndDisplay();
-    });
+    // logoutBtn.addEventListener("click", () => {
+    //     localStorage.removeItem("isLoggedIn");
+    //     checkAuthAndDisplay();
+    // });
 
     
     document.querySelector(".close").onclick = () => modal.style.display = "none";
@@ -129,3 +129,108 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     checkAuthAndDisplay();
 });
+
+document.getElementById("planForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const fiveK = parseFloat(document.getElementById("5k").value);
+    const tenK = parseFloat(document.getElementById("10k").value);
+    const weight = parseFloat(document.getElementById("weight").value);
+    const height = parseFloat(document.getElementById("height").value);
+
+
+    let B,P,I;
+
+  B= weight/(height*height);
+  P=((fiveK/5)+(tenK/10))/2;
+  I=P*Math.sqrt(B/22)
+
+  if(I<4.5) {
+    fetch();
+  }
+  else if(I>=4.5 && I<6.5) {
+    fetch();
+  }
+  else {
+    fetch();
+  }
+});
+
+
+
+const registrationForm = document.getElementById('register-form');
+
+registrationForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    
+    document.querySelectorAll('.error-msg').forEach(el => el.textContent = '');
+    document.querySelectorAll('.login-input').forEach(el => el.classList.remove('invalid'));
+
+    const email = document.getElementById('Email');
+    const username = document.getElementById('username');
+    const pass = document.getElementById('password');
+    const repeatPass = document.getElementById('repeat-password');
+
+    let isValid = true;
+
+    
+    const showError = (inputEl, errorId, message) => {
+        document.getElementById(errorId).textContent = message;
+        inputEl.classList.add('invalid');
+        isValid = false;
+    };
+
+    
+    [email, username, pass, repeatPass].forEach(input => {
+        if (input.value.length > 32) {
+            showError(input, `${input.id}-error`, "Maximum 32 characters allowed.");
+        }
+    });
+
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.com$/;
+    if (!emailRegex.test(email.value)) {
+        showError(email, 'email-error', "Invalid email (must end in .com)");
+    }
+
+    
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (pass.value !== repeatPass.value) {
+        showError(repeatPass, 'repeat-error', "Passwords do not match.");
+    } else if (!passwordRegex.test(pass.value)) {
+        showError(pass, 'pass-error', "Need 8+ chars, 1 uppercase, 1 lowercase, 1 number.");
+    }
+
+    if (!isValid) return;
+
+    
+    try {
+        const result = await mockBackendCheck(email.value, username.value);
+        if (!result.success) {
+            if (result.type === 'email') showError(email, 'email-error', result.message);
+            if (result.type === 'user') showError(username, 'user-error', result.message);
+        } else {
+            alert("Registration Successful!");
+            registrationForm.submit();
+        }
+    } catch (err) {
+        showError(email, 'email-error', "Server error. Try again later.");
+    }
+});
+
+async function mockBackendCheck(email, username) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            const dbEmails = ['test@test.com'];
+            const dbUsers = ['admin'];
+
+            if (dbEmails.includes(email)) {
+                resolve({ success: false, type: 'email', message: "Email already registered." });
+            } else if (dbUsers.includes(username)) {
+                resolve({ success: false, type: 'user', message: "Username already taken." });
+            } else {
+                resolve({ success: true });
+            }
+        }, 600);
+    });
+}

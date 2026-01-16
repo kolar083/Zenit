@@ -1,39 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Personal results</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <script src="app.js" defer></script>
-</head>
-<body>
-    
-<div id="myModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    
-    <div id="loginSection" style="display: none;">
-      <h2>Login Required</h2>
-      <p>Please log in to access the plan maker.</p>
-      <form id="loginForm">
-        <input type="text" id="username" placeholder="Username" required>
-        <button type="submit">Log In</button>
-      </form>
+  </head>
+  <body>
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="loginSection" style="display: none">
+          <h2 style="margin-bottom: 10px">Login Required</h2>
+          <p>Please log in to access the plan maker.</p>
+          <form id="loginForm">
+            <input
+              type="text"
+              id="username"
+              class="login-input"
+              placeholder="Username"
+              required
+            />
+            <input
+              type="password"
+              id="password"
+              class="login-input"
+              placeholder="Password"
+              required
+            />
+            <input type="submit" value="Log In" />
+          </form>
+        </div>
+        <div id="planSection" style="display: none">
+          <h2 style="margin-bottom: 10px;">Welcome to the Plan Maker</h2>
+          <p>Here we will create your personalized plan.</p>
+          <form id="planForm">
+            <input type="number" placeholder="Enter your 5k pb (minutes)" required  id="5k" class="login-input"/>
+            <input type="number" placeholder="Enter your 10k pb (minutes)" required  id="10k" class="login-input"/>
+            <input type="number" placeholder="Enter your weight (kg)" required  id="weight" class="login-input"/>
+            <input type="number" placeholder="Enter your height (meters)" required  id="height" class="login-input"/>
+            <input type="submit" value="Create Plan" />
+          </form>
+          <!-- <button id="logoutBtn" style="margin-top: 10px">Logout</button> -->
+        </div>
+      </div>
     </div>
 
-    <div id="planSection" style="display: none;">
-      <h2>Welcome to the Plan Maker</h2>
-      <p>Here we will create your personalized plan.</p>
-      <form id="planForm">
-        <input type="text" placeholder="Plan Name" required>
-        <button type="submit">Create Plan</button>
-      </form>
-      <button id="logoutBtn" style="margin-top: 10px;">Logout</button>
-    </div>
-    
-  </div>
-</div>
 
-</body>
+      
+
+
+
+
+
+  </body>
 </html>
