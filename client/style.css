@@ -596,6 +596,7 @@ nav a:hover {
   position: relative;
   margin-top: 15px;
   left: 14%;
+  margin-bottom:20px;
 }
 #planForm input[type="submit"]{
   background-color: #0e8388;
