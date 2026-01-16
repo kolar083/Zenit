@@ -59,19 +59,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+
 document.addEventListener("DOMContentLoaded", async () => {
   const modal = document.getElementById("myModal");
   const loginSection = document.getElementById("loginSection");
   const planSection = document.getElementById("planSection");
   const loginForm = document.getElementById("loginForm");
-  const logoutBtn = document.getElementById("logoutBtn");
 
-  const checkAuthAndDisplay = async () => {
-    const isLoggedIn = await simulateAuthCheck();
-
+  
+  const checkAuthAndDisplay = () => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
     modal.style.display = "block";
 
-    if (isLoggedIn) {
+    if (isLoggedIn === "true") {
       loginSection.style.display = "none";
       planSection.style.display = "block";
     } else {
@@ -80,27 +80,59 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
-  async function simulateAuthCheck() {
-    return new Promise((resolve) => {
-      const user = localStorage.getItem("isLoggedIn");
-      setTimeout(() => resolve(user === "true"), 500);
-    });
-  }
-
+  
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    
+    const usernameValue = document.getElementById("username").value;
+    const passwordValue = document.getElementById("password").value;
 
-    localStorage.setItem("isLoggedIn", "true");
-    checkAuthAndDisplay(); 
+    try {
+      
+      const response = await fetch("http://localhost:3000/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+            Username: usernameValue, 
+            Password: passwordValue 
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userToken", data.token); 
+        
+        
+        loginSection.style.display = "none";
+        planSection.style.display = "block";
+        
+        console.log("Uspešan login:", data.message);
+      } else {
+        
+        alert(data.message || "Neispravni podaci za prijavu.");
+      }
+    } catch (error) {
+      console.error("Greška pri komunikaciji sa serverom:", error);
+      alert("Serverska greška. Proverite da li je backend pokrenut.");
+    }
   });
 
-  document.querySelector(".close").onclick = () =>
-    (modal.style.display = "none");
+  
+  document.querySelector(".close").onclick = () => {
+    modal.style.display = "none";
+  };
 
   checkAuthAndDisplay();
 });
+
+
+
 
 document.getElementById("planForm").addEventListener("submit", function (e) {
   e.preventDefault();
