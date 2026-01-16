@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     localStorage.setItem("isLoggedIn", "true");
-    checkAuthAndDisplay(); // Refresh the view
+    checkAuthAndDisplay(); 
   });
 
   document.querySelector(".close").onclick = () =>
