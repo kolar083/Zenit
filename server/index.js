@@ -82,6 +82,59 @@ router.post('/register', async (req, res) => {
   }
 });
 
+router.post('/login', async (req, res) => {
+  const { Username, Password } = req.body;
+
+  if (!Username || !Password) {
+    return res.status(400).json({ message: "Username and password are required" });
+  }
+
+  const query = "SELECT * FROM users WHERE Username = ?";
+
+  db.query(query, [Username], async (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Database error" });
+    }
+
+    if (results.length === 0) {
+      return res.status(401).json({ message: "Invalid username or password" });
+    }
+
+    const user = results[0];
+    console.log("EXACT KEYS FROM DB:", Object.keys(user)); 
+    const isMatch = await bcrypt.compare(Password, user.Password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid username or password" });
+    }
+
+    return res.status(200).json({ 
+        message: "Login successful",
+        ID_user: user.id_user || user.ID_user || user.ID_User
+
+    });
+  });
+});
+
+router.post('/statistics', async (req, res) => {
+  const { ID_User, Nb_Weeks, Date_Of_Start, ID_Plan, ID_Race } = req.body;
+
+  if (!Nb_Weeks) {
+    return res.status(400).json({ message: "You must choose a number of weeks" });
+  }
+  const insertQuery =
+    "INSERT INTO statistics (ID_User, Nb_Weeks, Date_Of_Start, ID_Plan, ID_Race) VALUES (?, ?, ?, ?, ?)";
+
+      db.query(insertQuery, [ID_User, Nb_Weeks, Date_Of_Start, ID_Plan,  ID_Race], (err2) => {
+        if (err2) {
+          console.error(err2);
+          return res.status(500).json({ message: "Error while adding weeks to the db." });
+        }
+        return res.status(201).json({ message: "User has been added to the database" });
+      });
+ 
+});
+
 app.listen(PORT,()=>{
     console.log('Server je na portu ' + PORT);
 })

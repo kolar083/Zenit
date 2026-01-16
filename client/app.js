@@ -100,8 +100,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       if (response.ok) {
         localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("userToken", data.token);
-
+        localStorage.setItem('user_id', data.ID_user);
+        console.log("Saved to storage:", localStorage.getItem('user_id'));
         loginSection.style.display = "none";
         planSection.style.display = "block";
 
