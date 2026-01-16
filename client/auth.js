@@ -28,7 +28,7 @@ form.addEventListener('submit', async (e)=>{
 
         if(response.ok){
             alert('Registration done!');
-            window.location.href='Login.html';
+            window.location.href='DecisionModal.html';
         }
         else{
             alert(data);
