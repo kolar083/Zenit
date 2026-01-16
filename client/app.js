@@ -60,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /*window.onload = function() {
   const modal = document.getElementById("myModal");
   const span = document.getElementsByClassName("close")[0];
@@ -139,8 +140,29 @@ window.onload = function() {
                 alert('Server error');
             }
         });
+=======
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const modal = document.getElementById("myModal");
+  const loginSection = document.getElementById("loginSection");
+  const planSection = document.getElementById("planSection");
+  const loginForm = document.getElementById("loginForm");
+
+  
+  const checkAuthAndDisplay = () => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    modal.style.display = "block";
+
+    if (isLoggedIn === "true") {
+      loginSection.style.display = "none";
+      planSection.style.display = "block";
+    } else {
+      loginSection.style.display = "block";
+      planSection.style.display = "none";
+>>>>>>> 80ce8f18e986e59aa2ad6f2c6f9cc44cc30bcfd3
     }
 
+<<<<<<< HEAD
     // 4. Logika za Plan Formu (opciono, dodaj slanje podataka na server ovde)
     if (planForm) {
         planForm.addEventListener('submit', (e) => {
@@ -304,6 +326,90 @@ registrationForm.addEventListener('submit', async (e) => {
         }
     } catch (err) {
         showError(email, 'email-error', "Server error. Try again later.");
+=======
+  
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    
+    const usernameValue = document.getElementById("username").value;
+    const passwordValue = document.getElementById("password").value;
+
+    try {
+      
+      const response = await fetch("http://localhost:3000/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+            Username: usernameValue, 
+            Password: passwordValue 
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userToken", data.token); 
+        
+        
+        loginSection.style.display = "none";
+        planSection.style.display = "block";
+        
+        console.log("Uspešan login:", data.message);
+      } else {
+        
+        alert(data.message || "Neispravni podaci za prijavu.");
+      }
+    } catch (error) {
+      console.error("Greška pri komunikaciji sa serverom:", error);
+      alert("Serverska greška. Proverite da li je backend pokrenut.");
+    }
+  });
+
+  
+  document.querySelector(".close").onclick = () => {
+    modal.style.display = "none";
+  };
+
+  checkAuthAndDisplay();
+});
+
+
+
+
+document.getElementById("planForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const fiveK = parseFloat(document.getElementById("5k").value);
+  const tenK = parseFloat(document.getElementById("10k").value);
+  const weight = parseFloat(document.getElementById("weight").value);
+  const height = parseFloat(document.getElementById("height").value);
+  const W = parseInt(
+    document.querySelector('input[name="weeks"]:checked')?.value
+  );
+  function Choice(sport) {
+    localStorage.setItem('izabraniSport', sport);
+  }
+
+  let B, P, I;
+
+  B = weight / (height * height);
+  P = (fiveK / 5 + tenK / 10) / 2;
+  I = P * Math.sqrt(B / 22);
+
+  function Choice(sport) {
+    if (I <= 5.5) {
+      if (W == 12) fetch();
+      else if (W == 16) fetch();
+      else if (W == 20) fetch();
+    } else if (I > 5.5) {
+      if (W == 12) fetch();
+      else if (W == 16) fetch();
+      else if (W == 20) fetch();
+>>>>>>> 80ce8f18e986e59aa2ad6f2c6f9cc44cc30bcfd3
     }
 });
 

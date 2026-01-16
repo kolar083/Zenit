@@ -24,7 +24,6 @@ function isValidEmail(email) {
 app.post("/user/register", async (req, res) => {
   try {
     const { Email, Username, Password } = req.body;
-
     if (!Email || !Username || !Password) {
       return res.status(400).json("Missing fields.");
     }
